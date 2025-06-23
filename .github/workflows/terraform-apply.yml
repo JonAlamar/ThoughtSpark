@@ -27,6 +27,21 @@ jobs:
           role-to-assume: arn:aws:iam::393800486110:role/ThoughtSpark_Terraform_Role
           aws-region: us-east-1
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Build Lambda ZIP package
+        run: |
+          cd lambda
+          pip install -r requirements.txt -t .
+          zip -r ../lambda.zip .
+
+      - name: Upload ZIP to S3
+        run: |
+          aws s3 cp lambda.zip s3://thoughtspark-lambda-code/thoughtspark/lambda.zip
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
