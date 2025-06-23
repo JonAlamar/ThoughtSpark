@@ -1,14 +1,12 @@
-name: Terraform Deploy
+name: Terraform Plan (Manual)
 
 on:
-  push:
-    branches:
-      - main  # Adjust as needed
+  workflow_dispatch:
 
 jobs:
-  terraform:
+  plan:
+    name: Terraform Validate & Plan
     runs-on: ubuntu-latest
-    environment: production  # Enables approval gate
 
     permissions:
       id-token: write
@@ -33,14 +31,14 @@ jobs:
         run: terraform init
         working-directory: ./infra
 
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: ./infra
+
       - name: Terraform Plan
         run: terraform plan -out=tfplan
         working-directory: ./infra
 
-      - name: Show Plan
+      - name: Show Plan Output
         run: terraform show -no-color tfplan
-        working-directory: ./infra
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
         working-directory: ./infra
