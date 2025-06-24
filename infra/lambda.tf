@@ -8,7 +8,6 @@ resource "aws_lambda_function" "query_handler" {
 
   environment {
     variables = {
-      PINECONE_API_KEY     = var.pinecone_api_key
       PINECONE_ENV         = var.pinecone_env
       PINECONE_INDEX_NAME  = var.pinecone_index_name
     }
