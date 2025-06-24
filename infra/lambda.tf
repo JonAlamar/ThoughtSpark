@@ -17,6 +17,24 @@ resource "aws_lambda_function" "query_handler" {
   }
 }
 
+resource "aws_lambda_function" "query_handler" {
+  function_name = var.lambda_function_name
+  handler       = "app.lambda_handler"
+  runtime       = "python3.12"
+  role          = aws_iam_role.lambda_exec_role.arn
+
+  s3_bucket         = var.lambda_s3_bucket
+  s3_key            = var.lambda_s3_key
+  source_code_hash  = var.lambda_source_hash
+
+  environment {
+    variables = {
+      PINECONE_ENV         = var.pinecone_env
+      PINECONE_INDEX_NAME  = var.pinecone_index_name
+    }
+  }
+}
+
 resource "aws_lambda_permission" "allow_apigw" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"

@@ -32,20 +32,31 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Build Lambda ZIP package
+      - name: Build, upload, and hash all Lambda ZIPs
         run: |
-          cd lambda
-          pip install -r requirements.txt -t .
-          zip -r ../lambda.zip .
+          mkdir -p lambda_hashes
+          for dir in lambda/*; do
+            name=$(basename "$dir")
+            echo "▶️ Building Lambda: $name"
 
-      - name: Upload ZIP to S3
-        run: aws s3 cp lambda.zip s3://thoughtspark-lambda-code/thoughtspark/lambda.zip
+            # Create build dir
+            mkdir -p "build/$name"
+            cp "$dir"/*.py "$dir"/requirements.txt "build/$name/"
 
-      - name: Calculate Lambda ZIP hash
-        id: ziphash
-        run: |
-          HASH=$(openssl dgst -sha256 -binary lambda.zip | base64)
-          echo "hash=$HASH" >> "$GITHUB_OUTPUT"
+            # Install dependencies and package
+            cd "build/$name"
+            pip install -r requirements.txt -t .
+            zip -r "../../${name}.zip" .
+            cd ../..
+
+            # Upload to S3
+            aws s3 cp "${name}.zip" "s3://thoughtspark-lambda-code/thoughtspark/${name}.zip"
+
+            # Calculate hash
+            HASH=$(openssl dgst -sha256 -binary "${name}.zip" | base64)
+            echo "$HASH" > "lambda_hashes/${name}.hash"
+            echo "✅ $name hash: $HASH"
+          done
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
