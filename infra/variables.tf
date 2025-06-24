@@ -1,5 +1,9 @@
-variable "lambda_function_name" {
+variable "query_lambda_function_name" {
   default = "thoughtspark-query-handler"
+}
+
+variable "log_lambda_function_name" {
+  default = "thoughtspark-log-handler"
 }
 
 variable "lambda_s3_bucket" {

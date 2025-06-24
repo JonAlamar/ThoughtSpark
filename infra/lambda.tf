@@ -1,6 +1,6 @@
 
 resource "aws_lambda_function" "query_handler" {
-  function_name = var.lambda_function_name
+  function_name = var.query_lambda_function_name
   handler       = "app.lambda_handler"
   runtime       = "python3.12"
   role          = aws_iam_role.lambda_exec_role.arn
@@ -17,9 +17,9 @@ resource "aws_lambda_function" "query_handler" {
   }
 }
 
-resource "aws_lambda_function" "query_handler" {
-  function_name = var.lambda_function_name
-  handler       = "app.lambda_handler"
+resource "aws_lambda_function" "log_handler" {
+  function_name = var.log_lambda_function_name
+  handler       = "log.lambda_handler"
   runtime       = "python3.12"
   role          = aws_iam_role.lambda_exec_role.arn
 
