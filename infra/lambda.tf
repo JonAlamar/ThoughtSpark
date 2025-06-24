@@ -1,7 +1,6 @@
 
 resource "aws_lambda_function" "query_handler" {
   function_name = var.lambda_function_name
-  filename      = "${path.module}/../lambda/lambda.zip"
   handler       = "app.lambda_handler"
   runtime       = "python3.12"
   role          = aws_iam_role.lambda_exec_role.arn
