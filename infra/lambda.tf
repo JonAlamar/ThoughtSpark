@@ -35,10 +35,18 @@ resource "aws_lambda_function" "log_handler" {
   }
 }
 
-resource "aws_lambda_permission" "allow_apigw" {
+resource "aws_lambda_permission" "allow_apigw_query" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.query_handler.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "allow_apigw_log" {
+  statement_id  = "AllowExecutionFromAPIGatewayLog"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.log_ingest_handler.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
 }
