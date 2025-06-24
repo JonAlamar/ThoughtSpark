@@ -31,16 +31,35 @@ resource "aws_iam_role" "lambda_exec_role" {
   name = "thoughtspark_lambda_exec"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
-    Statement = [{
+    Statement = [
+      {
       Action = "sts:AssumeRole",
       Principal = { Service = "lambda.amazonaws.com" },
       Effect = "Allow",
       Sid    = ""
-    },
-    {
-      Effect = "Allow",
-      Action = "secretsmanager:GetSecretValue",
-      Resource = "arn:aws:secretsmanager:us-east-1:393800486110:secret:thoughtspark/pinecone-zWcZXG"
-    }]
+    }
+    ]
   })
+}
+resource "aws_iam_policy" "lambda_policy" {
+  name        = "thoughtspark_lambda_policy"
+  description = "Policy for Lambda to access required resources"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ],
+        Resource = "arn:aws:secretsmanager:us-east-1:393800486110:secret:Pinecone_API_key-fL2g0U"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
+  role       = aws_iam_role.lambda_exec_role.name
+  policy_arn = aws_iam_policy.lambda_policy.arn
 }
