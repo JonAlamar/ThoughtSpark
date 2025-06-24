@@ -16,3 +16,7 @@ variable "pinecone_env" {
 variable "pinecone_index_name" {
   default = "thoughtspark-index"
 }
+variable "lambda_source_hash" {
+  description = "The source code hash for the Lambda function deployment package."
+  type        = string
+}

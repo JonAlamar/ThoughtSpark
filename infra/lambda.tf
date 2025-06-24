@@ -6,6 +6,10 @@ resource "aws_lambda_function" "query_handler" {
   runtime       = "python3.12"
   role          = aws_iam_role.lambda_exec_role.arn
 
+  s3_bucket         = var.lambda_s3_bucket
+  s3_key            = var.lambda_s3_key
+  source_code_hash  = var.lambda_source_hash
+
   environment {
     variables = {
       PINECONE_ENV         = var.pinecone_env
