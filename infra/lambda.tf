@@ -46,7 +46,7 @@ resource "aws_lambda_permission" "allow_apigw_query" {
 resource "aws_lambda_permission" "allow_apigw_log" {
   statement_id  = "AllowExecutionFromAPIGatewayLog"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.log_ingest_handler.function_name
+  function_name = aws_lambda_function.log_handler.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/*/*"
 }
