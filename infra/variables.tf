@@ -10,6 +10,12 @@ variable "lambda_s3_key" {
   default = "thoughtspark/lambda.zip"
 }
 
-variable "pinecone_api_key" {}
-variable "pinecone_env" {}
-variable "pinecone_index_name" {}
+variable "pinecone_api_key" {
+
+}
+variable "pinecone_env" {
+  default = "us-east-1-aws"
+}
+variable "pinecone_index_name" {
+  default = "thoughtspark-index"
+}

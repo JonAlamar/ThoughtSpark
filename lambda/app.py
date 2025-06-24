@@ -4,15 +4,38 @@ import os
 import pinecone
 from botocore.exceptions import BotoCoreError, ClientError
 
-# Initialize Bedrock client and Pinecone
+# Initialize Bedrock client once (safe to cache)
 bedrock = boto3.client("bedrock-runtime", region_name="us-east-1")
 
-pinecone.init(
-    api_key=os.environ["PINECONE_API_KEY"],
-    environment=os.environ["PINECONE_ENV"]
-)
-index = pinecone.Index(os.environ["PINECONE_INDEX_NAME"])
+# Globals for lazy init
+pinecone_api_key = None
+pinecone_index = None
 
+# Securely get secret from AWS Secrets Manager
+def get_secret(secret_name):
+    client = boto3.client("secretsmanager", region_name="us-east-1")
+    response = client.get_secret_value(SecretId=secret_name)
+    return json.loads(response["SecretString"])
+
+# Initialize Pinecone (lazy and cached)
+def init_pinecone():
+    global pinecone_api_key, pinecone_index
+
+    if pinecone_index:
+        return pinecone_index
+
+    if not pinecone_api_key:
+        secret = get_secret("thoughtspark/pinecone")
+        pinecone_api_key = secret["PINECONE_API_KEY"]
+
+    pinecone.init(
+        api_key=pinecone_api_key,
+        environment=os.environ["PINECONE_ENV"]
+    )
+    pinecone_index = pinecone.Index(os.environ["PINECONE_INDEX_NAME"])
+    return pinecone_index
+
+# Lambda entry point
 def lambda_handler(event, context):
     try:
         body = json.loads(event.get("body", "{}"))
@@ -22,10 +45,16 @@ def lambda_handler(event, context):
         if not query_text:
             return {"statusCode": 400, "body": json.dumps({"error": "Missing query"})}
 
+        # Initialize Pinecone
+        index = init_pinecone()
+
         # Step 1: Get Titan embedding
         embed_response = bedrock.invoke_model(
-            modelId="amazon.titan-embed-text-v1",
-            body=json.dumps({"inputText": query_text}),
+            modelId="amazon.titan-embed-text-v2:0",
+            body=json.dumps({
+                "inputText": query_text,
+                "embeddingDimension": 1024  # if using Titan v2 with Pinecone
+            }),
             contentType="application/json",
             accept="application/json"
         )

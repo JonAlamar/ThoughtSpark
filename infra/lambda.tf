@@ -37,6 +37,11 @@ resource "aws_iam_role" "lambda_exec_role" {
       Principal = { Service = "lambda.amazonaws.com" },
       Effect = "Allow",
       Sid    = ""
+    },
+    {
+      Effect = "Allow",
+      Action = "secretsmanager:GetSecretValue",
+      Resource = "arn:aws:secretsmanager:us-east-1:393800486110:secret:thoughtspark/pinecone-zWcZXG"
     }]
   })
 }
