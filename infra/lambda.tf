@@ -6,8 +6,8 @@ resource "aws_lambda_function" "query_handler" {
   role          = aws_iam_role.lambda_exec_role.arn
 
   s3_bucket         = var.lambda_s3_bucket
-  s3_key            = var.lambda_s3_key
-  source_code_hash  = var.lambda_source_hash
+  s3_key            = var.query_lambda_s3_key
+  source_code_hash  = var.query_lambda_source_hash
 
   environment {
     variables = {
@@ -24,8 +24,8 @@ resource "aws_lambda_function" "log_handler" {
   role          = aws_iam_role.lambda_exec_role.arn
 
   s3_bucket         = var.lambda_s3_bucket
-  s3_key            = var.lambda_s3_key
-  source_code_hash  = var.lambda_source_hash
+  s3_key            = var.log_lambda_s3_key
+  source_code_hash  = var.log_lambda_source_hash
 
   environment {
     variables = {

@@ -58,6 +58,12 @@ jobs:
             echo "✅ $name hash: $HASH"
           done
 
+      - name: Export Lambda Hashes
+        id: lambdahashes
+        run: |
+          echo "query=$(cat lambda_hashes/query_handler.hash)" >> $GITHUB_OUTPUT
+          echo "log=$(cat lambda_hashes/log_handler.hash)" >> $GITHUB_OUTPUT
+
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -70,7 +76,9 @@ jobs:
       - name: Terraform Apply
         env:
           TF_VAR_lambda_s3_bucket: thoughtspark-lambda-code
-          TF_VAR_lambda_s3_key: thoughtspark/lambda.zip
-          TF_VAR_lambda_source_hash: ${{ steps.ziphash.outputs.hash }}
+          TF_VAR_query_lambda_s3_key: thoughtspark/query_handler.zip
+          TF_VAR_query_lambda_source_hash: ${{ steps.lambdahashes.outputs.query }}
+          TF_VAR_log_lambda_s3_key: thoughtspark/log_handler.zip
+          TF_VAR_log_lambda_source_hash: ${{ steps.lambdahashes.outputs.log }}
         run: terraform apply -auto-approve
         working-directory: ./infra

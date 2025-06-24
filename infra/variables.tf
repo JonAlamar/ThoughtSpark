@@ -10,9 +10,14 @@ variable "lambda_s3_bucket" {
   default = "thoughtspark-lambda-code"
 }
 
-variable "lambda_s3_key" {
-  default = "thoughtspark/lambda.zip"
+variable "log_lambda_s3_key" {
+  default = "thoughtspark/log_handler.zip"
 }
+
+variable "query_lambda_s3_key" {
+  default = "thoughtspark/query_lambda.zip"
+}
+
 
 variable "pinecone_env" {
   default = "us-east-1-aws"
@@ -20,7 +25,12 @@ variable "pinecone_env" {
 variable "pinecone_index_name" {
   default = "thoughtspark-index"
 }
-variable "lambda_source_hash" {
+variable "query_lambda_source_hash" {
+  description = "The source code hash for the Lambda function deployment package."
+  type        = string
+}
+
+variable "log_lambda_source_hash" {
   description = "The source code hash for the Lambda function deployment package."
   type        = string
 }
