@@ -38,9 +38,9 @@ jobs:
           pip install -r requirements.txt -t .
           zip -r ../lambda.zip .
 
-      - name: Upload ZIP to S3
-        run: |
-          aws s3 cp lambda.zip s3://thoughtspark-lambda-code/thoughtspark/lambda.zip
+      # - name: Upload ZIP to S3
+      #   run: |
+      #     aws s3 cp lambda.zip s3://thoughtspark-lambda-code/thoughtspark/lambda.zip
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
