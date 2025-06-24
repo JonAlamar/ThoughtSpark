@@ -37,7 +37,8 @@ jobs:
 
       - name: Terraform Plan
         env:
-          TF_VAR_lambda_source_hash: "dGhpcy1pcy1hLWZha2UtaGFzaA=="
+          TF_VAR_query_lambda_source_hash: "dGhpcy1pcy1hLWZha2UtaGFzaA=="
+          TF_VAR_log_lambda_source_hash: "dGhpcy1pcy1hLWZha2UtaGFzaA=="
         run: terraform plan -out=tfplan
         working-directory: ./infra
 
