@@ -5,7 +5,6 @@ resource "aws_lambda_function" "query_handler" {
   handler       = "app.lambda_handler"
   runtime       = "python3.12"
   role          = aws_iam_role.lambda_exec_role.arn
-  source_code_hash = filebase64sha256("${path.module}/../lambda/lambda.zip")
 
   environment {
     variables = {
