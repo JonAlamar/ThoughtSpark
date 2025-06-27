@@ -19,20 +19,17 @@ def get_secret(secret_name):
 
 # Initialize Pinecone (lazy and cached)
 def init_pinecone():
-    global pinecone_api_key, pinecone_index
+    global pinecone_index
 
     if pinecone_index:
         return pinecone_index
 
-    if not pinecone_api_key:
-        secret = get_secret("thoughtspark/pinecone")
-        pinecone_api_key = secret["PINECONE_API_KEY"]
+    secret = get_secret("thoughtspark/pinecone")
+    pinecone_api_key = secret["PINECONE_API_KEY"]
 
-    pinecone.init(
-        api_key=pinecone_api_key,
-        environment=os.environ["PINECONE_ENV"]
-    )
-    pinecone_index = pinecone.Index(os.environ["PINECONE_INDEX_NAME"])
+    pc = Pinecone(api_key=pinecone_api_key)
+    
+    pinecone_index = pc.Index(os.environ["PINECONE_INDEX_NAME"])
     return pinecone_index
 
 # Lambda entry point
