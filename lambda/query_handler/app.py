@@ -1,7 +1,7 @@
 import json
 import boto3
 import os
-import pinecone
+from pinecone import Pinecone
 from botocore.exceptions import BotoCoreError, ClientError
 
 # Initialize Bedrock client once (safe to cache)
