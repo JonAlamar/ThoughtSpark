@@ -3,6 +3,12 @@ resource "aws_apigatewayv2_api" "api" {
   protocol_type = "HTTP"
 }
 
+resource "aws_apigatewayv2_stage" "dev" {
+  api_id = aws_apigatewayv2_api.api.id
+  name   = "dev"  # This becomes part of your URL (e.g. /dev/query)
+  auto_deploy = true
+}
+
 resource "aws_apigatewayv2_integration" "query_lambda_integration" {
   api_id             = aws_apigatewayv2_api.api.id
   integration_type   = "AWS_PROXY"
