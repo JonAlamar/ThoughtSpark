@@ -82,7 +82,7 @@ resource "aws_iam_policy" "lambda_policy" {
         Action = [
           "secretsmanager:GetSecretValue"
         ],
-        Resource = "arn:aws:secretsmanager:us-east-1:393800486110:secret:Pinecone_API_key-fL2g0U"
+        Resource = "arn:aws:secretsmanager:us-east-1:393800486110:secret:thoughtspark/pinecone-zWcZXG"
       }
     ]
   })
