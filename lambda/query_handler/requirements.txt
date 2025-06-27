@@ -1,2 +1,2 @@
 boto3
-pinecone
+pinecone>=3.0.0
