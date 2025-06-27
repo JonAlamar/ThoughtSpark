@@ -1,1 +1,1 @@
-pinecone-client>=2.2.2
+pinecone>=3.0.0
