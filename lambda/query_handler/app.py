@@ -101,4 +101,5 @@ def lambda_handler(event, context):
     except (BotoCoreError, ClientError) as e:
         return {"statusCode": 500, "body": json.dumps({"error": f"AWS error: {str(e)}"})}
     except Exception as e:
+        print(f"Unhandled error: {str(e)}")
         return {"statusCode": 500, "body": json.dumps({"error": str(e)})}
