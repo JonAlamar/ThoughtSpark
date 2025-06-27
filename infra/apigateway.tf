@@ -37,9 +37,3 @@ resource "aws_apigatewayv2_route" "log_route" {
   route_key = "POST /log"
   target    = "integrations/${aws_apigatewayv2_integration.log_lambda_integration.id}"
 }
-
-resource "aws_apigatewayv2_stage" "default" {
-  api_id      = aws_apigatewayv2_api.api.id
-  name        = "$default"
-  auto_deploy = true
-}
