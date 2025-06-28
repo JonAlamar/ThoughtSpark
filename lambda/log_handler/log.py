@@ -43,7 +43,6 @@ def lambda_handler(event, context):
             modelId="amazon.titan-embed-text-v2:0",
             body=json.dumps({
                 "inputText": text,
-                "embeddingDimension": 1024
             }),
             contentType="application/json",
             accept="application/json"
