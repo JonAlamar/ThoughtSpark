@@ -1,7 +1,7 @@
 import json
 import boto3
 import os
-import pinecone
+from pinecone import Pinecone
 from botocore.exceptions import BotoCoreError, ClientError
 from datetime import datetime
 
@@ -9,6 +9,7 @@ bedrock = boto3.client("bedrock-runtime", region_name="us-east-1")
 
 pinecone_api_key = None
 pinecone_index = None
+pinecone_client = None
 
 def get_secret(secret_name):
     client = boto3.client("secretsmanager", region_name="us-east-1")
@@ -16,14 +17,14 @@ def get_secret(secret_name):
     return json.loads(response["SecretString"])
 
 def init_pinecone():
-    global pinecone_api_key, pinecone_index
+    global pinecone_client, pinecone_index
     if pinecone_index:
         return pinecone_index
-    if not pinecone_api_key:
+    if not pinecone_client:
         secret = get_secret("thoughtspark/pinecone")
         pinecone_api_key = secret["PINECONE_API_KEY"]
-    pinecone.init(api_key=pinecone_api_key, environment=os.environ["PINECONE_ENV"])
-    pinecone_index = pinecone.Index(os.environ["PINECONE_INDEX_NAME"])
+        pinecone_client = Pinecone(api_key=pinecone_api_key)
+    pinecone_index = pinecone_client.Index(os.environ["PINECONE_INDEX_NAME"])
     return pinecone_index
 
 def lambda_handler(event, context):
