@@ -23,6 +23,7 @@ resource "aws_lambda_function" "log_handler" {
   handler       = "log.lambda_handler"
   runtime       = "python3.12"
   role          = aws_iam_role.lambda_exec_role.arn
+  timeout       = 15
 
   s3_bucket         = var.lambda_s3_bucket
   s3_key            = var.log_lambda_s3_key
