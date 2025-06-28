@@ -85,6 +85,13 @@ resource "aws_iam_policy" "lambda_policy" {
           "secretsmanager:GetSecretValue"
         ],
         Resource = "arn:aws:secretsmanager:us-east-1:393800486110:secret:thoughtspark/pinecone-zWcZXG"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "bedrock:InvokeModel"
+        ],
+        Resource = "*"
       }
     ]
   })
